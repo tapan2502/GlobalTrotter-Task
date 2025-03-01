@@ -2,7 +2,7 @@ import axios from "axios"
 import { setupInterceptors } from "./axiosConfig"
 
 // Create axios instance
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api"
+const API_URL = import.meta.env.VITE_API_URL || "https://globaltrotter-task.onrender.com/api"
 const api = axios.create({
   baseURL: API_URL,
   headers: {
