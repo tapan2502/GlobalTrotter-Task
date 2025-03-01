@@ -1,260 +1,200 @@
-GlobeTrotter
-
+# GlobeTrotter
 GlobeTrotter is an interactive travel quiz game where players test their geography knowledge by guessing destinations based on AI-generated clues. Designed for travel enthusiasts and trivia lovers, the game provides fun and engaging challenges with a mix of text-based hints.
 
-Table of Contents
+## Table of Contents
 
-Features
+1. [Features](#features)
+2. [Technologies Used](#technologies-used)
+3. [Prerequisites](#prerequisites)
+4. [Installation](#installation)
+5. [Environment Variables](#environment-variables)
+6. [Usage](#usage)
+7. [API Endpoints](#api-endpoints)
+8. [Database Schema](#database-schema)
+9. [OpenAI Integration](#openai-integration)
+10. [Deployment](#deployment)
 
-Technologies Used
+## Features
 
-Prerequisites
+- User authentication and authorization using JWT
+- Dynamic question generation using OpenAI's GPT model
+- RESTful API for game logic and user interactions
+- MongoDB integration for data persistence
+- Challenge mode for competitive gameplay
+- Leaderboard functionality
+- Automatic dataset expansion with OpenAI
+- Profile management for users
 
-Installation
+## Technologies Used
 
-Environment Variables
+- Node.js
+- Express.js
+- MongoDB with Mongoose ODM
+- JSON Web Tokens (JWT) for authentication
+- OpenAI API for dynamic content generation
+- Bcrypt for password hashing
+- Dotenv for environment variable management
 
-Usage
-
-API Endpoints
-
-Database Schema
-
-OpenAI Integration
-
-Deployment
-
-Features
-
-User authentication and authorization using JWT
-
-Dynamic question generation using OpenAI's GPT model
-
-RESTful API for game logic and user interactions
-
-MongoDB integration for data persistence
-
-Challenge mode for competitive gameplay
-
-Leaderboard functionality
-
-Automatic dataset expansion with OpenAI
-
-Profile management for users
-
-Technologies Used
-
-Node.js
-
-Express.js
-
-MongoDB with Mongoose ODM
-
-JSON Web Tokens (JWT) for authentication
-
-OpenAI API for dynamic content generation
-
-Bcrypt for password hashing
-
-Dotenv for environment variable management
-
-Prerequisites
+## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
 
-Node.js (v14 or later)
+- Node.js (v14 or later)
+- MongoDB (local instance or cloud-based service like MongoDB Atlas)
+- OpenAI API key
+- Git (for version control)
 
-MongoDB (local instance or cloud-based service like MongoDB Atlas)
+## Installation
 
-OpenAI API key
+1. Clone the repository:
 
-Git (for version control)
-
-Installation
-
-Clone the repository:
-
+```sh
 git clone https://github.com/your-username/globetrotter-backend.git
 cd globetrotter-backend
+```
 
-Install dependencies:
+2. Install dependencies:
 
+```sh
 npm install
+```
 
-Set up environment variables (see Environment Variables section)
+3. Set up environment variables (see [Environment Variables](#environment-variables) section)
+4. Seed the initial dataset:
 
-Seed the initial dataset:
-
+```sh
 npm run seed
+```
 
-Environment Variables
+## Environment Variables
 
-Create a .env file in the root directory and add the following environment variables:
+Create a `.env` file in the root directory and add the following environment variables:
 
+```plaintext
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 JWT_EXPIRE=30d
 OPENAI_API_KEY=your_openai_api_key
 PORT=5000
+```
 
 Replace the placeholder values with your actual configuration details.
 
-Usage
+## Usage
 
 To start the server in development mode:
 
+```sh
 npm run dev
+```
 
 For production:
 
+```sh
 npm start
+```
 
-API Endpoints
+## API Endpoints
 
-Authentication
+### Authentication
 
-POST /api/auth/register - Register a new user
+- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/login` - User login
 
-POST /api/auth/login - User login
+### Game
 
-Game
+- `GET /api/game/question` - Get a random question
+- `POST /api/game/answer` - Submit an answer
 
-GET /api/game/question - Get a random question
+### Challenge
 
-POST /api/game/answer - Submit an answer
+- `GET /api/challenge` - Get current challenge
+- `POST /api/challenge/join` - Join a challenge
 
-Challenge
+### Leaderboard
 
-GET /api/challenge - Get current challenge
+- `GET /api/leaderboard` - Get leaderboard data
 
-POST /api/challenge/join - Join a challenge
+### Profile
 
-Leaderboard
+- `GET /api/profile` - Get user profile
+- `PUT /api/profile` - Update user profile
 
-GET /api/leaderboard - Get leaderboard data
+### Dataset
 
-Profile
+- `POST /api/dataset/seed` - Seed initial dataset (admin only)
+- `POST /api/dataset/expand` - Expand dataset using OpenAI (admin only)
 
-GET /api/profile - Get user profile
+For detailed API documentation, including request/response formats, please refer to the `API.md` file.
 
-PUT /api/profile - Update user profile
+## Database Schema
 
-Dataset
+### User
 
-POST /api/dataset/seed - Seed initial dataset (admin only)
+- `username`: String (unique)
+- `email`: String (unique)
+- `password`: String (hashed)
+- `score`: Number
+- `gamesPlayed`: Number
+- `createdAt`: Date
 
-POST /api/dataset/expand - Expand dataset using OpenAI (admin only)
+### Destination
 
-For detailed API documentation, including request/response formats, please refer to the API.md file.
-
-Database Schema
-
-User
-
-username: String (unique)
-
-email: String (unique)
-
-password: String (hashed)
-
-score: Number
-
-gamesPlayed: Number
-
-createdAt: Date
-
-Destination
-
-name: String
-
-country: String
-
-description: String
-
-funFacts: [String]
-
-questions: [
-{
-text: String,
-options: [String],
-correctAnswer: String
-}
+- `name`: String
+- `country`: String
+- `description`: String
+- `funFacts`: [String]
+- `questions`: [
+  {
+    text: String,
+    options: [String],
+    correctAnswer: String
+  }
 ]
 
-Challenge
+### Challenge
 
-startDate: Date
-
-endDate: Date
-
-participants: [User]
-
-leaderboard: [
-{
-user: User,
-score: Number
-}
+- `startDate`: Date
+- `endDate`: Date
+- `participants`: [User]
+- `leaderboard`: [
+  {
+    user: User,
+    score: Number
+  }
 ]
 
-OpenAI Integration
+## OpenAI Integration
 
 The Globetrotter Backend uses OpenAI's GPT model to dynamically generate new destinations and questions. This integration allows for an ever-expanding dataset, keeping the game fresh and engaging for players.
 
 Key integration points:
 
-expandDataset function in datasetController.js
+- `expandDataset` function in `datasetController.js`
+- Automatic dataset expansion when the number of destinations falls below a threshold
 
-Automatic dataset expansion when the number of destinations falls below a threshold
+## Deployment
 
-Deployment
+The Globetrotter project is deployed as follows:
 
-GlobeTrotter can be deployed using Render for the backend and Netlify for the frontend.
+- **Backend**: Hosted on Render
+- **Frontend**: Hosted on Netlify
+- **Live URL**: [Globetrotter Live](https://globetrotter-task.netlify.app/)
 
-Backend Deployment (Render)
+To deploy your own version:
 
-Push Code to GitHubEnsure your backend repository is hosted on GitHub.
+1. **Deploy Backend on Render:**
+   - Push your code to GitHub.
+   - Create a new service on Render.
+   - Connect your GitHub repository.
+   - Set up the environment variables.
+   - Deploy and monitor logs.
 
-Create a Render Web Service
+2. **Deploy Frontend on Netlify:**
+   - Push your frontend code to GitHub.
+   - Link the repository to Netlify.
+   - Configure build settings (`npm run build`).
+   - Deploy and verify the site.
 
-Go to Render and log in.
-
-Click on New Web Service and connect your GitHub repository.
-
-Select Node.js as the environment.
-
-Set Environment VariablesIn the Render Dashboard, add the following environment variables:
-
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-JWT_EXPIRE=30d
-OPENAI_API_KEY=your_openai_api_key
-PORT=5000
-
-Build & Start Command
-
-Build Command: npm install
-
-Start Command: npm start
-
-DeployClick on Deploy and wait for the build to complete. Your backend API will be live on https://your-app.onrender.com.
-
-Frontend Deployment (Netlify)
-
-Push Code to GitHubEnsure your frontend code is hosted on GitHub.
-
-Deploy to Netlify
-
-Go to Netlify and log in.
-
-Click New Site from Git and select your frontend repository.
-
-Set the build command: npm run build
-
-Set the publish directory: build/
-
-Set Environment Variables (If Required)In the Netlify Dashboard, add any required frontend environment variables.
-
-DeployClick Deploy Site, and your frontend will be live on a Netlify domain like https://your-app.netlify.app.
-
-This setup ensures a smooth deployment process for both the backend (Render) and frontend (Netlify), making the game fully accessible online. 🚀
+Now your project is live and accessible via the provided URL!
 
