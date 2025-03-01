@@ -3,16 +3,92 @@ GlobeTrotter is an interactive travel quiz game where players test their geograp
 
 ## Table of Contents
 
-1. [Features](#features)
-2. [Technologies Used](#technologies-used)
-3. [Prerequisites](#prerequisites)
-4. [Installation](#installation)
-5. [Environment Variables](#environment-variables)
-6. [Usage](#usage)
-7. [API Endpoints](#api-endpoints)
-8. [Database Schema](#database-schema)
-9. [OpenAI Integration](#openai-integration)
-10. [Deployment](#deployment)
+1. [Tech Choice](#tech-choice)
+2. [Features](#features)
+3. [Technologies Used](#technologies-used)
+4. [Prerequisites](#prerequisites)
+5. [Installation](#installation)
+6. [Environment Variables](#environment-variables)
+7. [Usage](#usage)
+8. [API Endpoints](#api-endpoints)
+9. [Database Schema](#database-schema)
+10. [OpenAI Integration](#openai-integration)
+11. [Deployment](#deployment)
+
+## Tech Choice
+
+GlobeTrotter is a MERN stack project utilizing essential frontend and backend libraries for seamless performance.
+
+### Frontend (React + Vite)
+
+```json
+{
+  "name": "globetrotter-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.6",
+    "@mui/material": "^6.4.6",
+    "@reduxjs/toolkit": "^2.6.0",
+    "axios": "^1.8.1",
+    "confetti-js": "^0.0.18",
+    "framer-motion": "^12.4.7",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.2.0",
+    "react-toastify": "^11.0.5",
+    "redux-persist": "^6.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^15.15.0",
+    "vite": "^6.2.0"
+  }
+}
+```
+
+### Backend (Node.js + Express)
+
+```json
+{
+  "name": "globetrotter-backend",
+  "version": "1.0.0",
+  "description": "Backend for the Globetrotter geography quiz game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "echo 'No build step required for backend'"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.5.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.11.0",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.86.1"
+  }
+}
+```
 
 ## Features
 
@@ -65,113 +141,6 @@ npm install
 ```sh
 npm run seed
 ```
-
-## Environment Variables
-
-Create a `.env` file in the root directory and add the following environment variables:
-
-```plaintext
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-JWT_EXPIRE=30d
-OPENAI_API_KEY=your_openai_api_key
-PORT=5000
-```
-
-Replace the placeholder values with your actual configuration details.
-
-## Usage
-
-To start the server in development mode:
-
-```sh
-npm run dev
-```
-
-For production:
-
-```sh
-npm start
-```
-
-## API Endpoints
-
-### Authentication
-
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - User login
-
-### Game
-
-- `GET /api/game/question` - Get a random question
-- `POST /api/game/answer` - Submit an answer
-
-### Challenge
-
-- `GET /api/challenge` - Get current challenge
-- `POST /api/challenge/join` - Join a challenge
-
-### Leaderboard
-
-- `GET /api/leaderboard` - Get leaderboard data
-
-### Profile
-
-- `GET /api/profile` - Get user profile
-- `PUT /api/profile` - Update user profile
-
-### Dataset
-
-- `POST /api/dataset/seed` - Seed initial dataset (admin only)
-- `POST /api/dataset/expand` - Expand dataset using OpenAI (admin only)
-
-For detailed API documentation, including request/response formats, please refer to the `API.md` file.
-
-## Database Schema
-
-### User
-
-- `username`: String (unique)
-- `email`: String (unique)
-- `password`: String (hashed)
-- `score`: Number
-- `gamesPlayed`: Number
-- `createdAt`: Date
-
-### Destination
-
-- `name`: String
-- `country`: String
-- `description`: String
-- `funFacts`: [String]
-- `questions`: [
-  {
-    text: String,
-    options: [String],
-    correctAnswer: String
-  }
-]
-
-### Challenge
-
-- `startDate`: Date
-- `endDate`: Date
-- `participants`: [User]
-- `leaderboard`: [
-  {
-    user: User,
-    score: Number
-  }
-]
-
-## OpenAI Integration
-
-The Globetrotter Backend uses OpenAI's GPT model to dynamically generate new destinations and questions. This integration allows for an ever-expanding dataset, keeping the game fresh and engaging for players.
-
-Key integration points:
-
-- `expandDataset` function in `datasetController.js`
-- Automatic dataset expansion when the number of destinations falls below a threshold
 
 ## Deployment
 
